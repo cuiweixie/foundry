@@ -30,7 +30,7 @@ pub async fn check_tx_status(
     hash: TxHash,
     timeout: u64,
 ) -> (TxHash, Result<TxStatus, eyre::Report>) {
-    let result = retry::Retry::new_no_delay(3)
+    let result = retry::Retry::new(3, Duration::from_secs(2))
         .run_async_until_break(|| async {
             match PendingTransactionBuilder::new(provider.clone(), hash)
                 .with_timeout(Some(Duration::from_secs(timeout)))
